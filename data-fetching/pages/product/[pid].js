@@ -4,6 +4,11 @@ import path from 'path';
 import process from 'process';
 
 const SelectedProduct = ({ selectedProduct }) => {
+
+    if (!selectedProduct) {
+        return <p>Loading</p>
+    }
+
     return (
         <div>
             <h1>You're in a selected product page</h1>
@@ -29,6 +34,14 @@ export async function getStaticProps(context) {
     const data = await getData();
 
     const product = data.products.find(product => product.id === productId);
+    
+    console.log("in the static props function");
+
+    if (!product) {
+        return {
+            notFound: true,
+        }
+    }
 
     return {
         props: {

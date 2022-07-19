@@ -9,7 +9,7 @@ const index = ({ products }) => {
         <div>
             {products.map((obj) => (
                 <li>
-                    <Link href={`/${obj.id}`}>
+                    <Link href={`/product/${obj.id}`}>
                         {obj.title}
                     </Link>
                 </li>

@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react"
 import useSWR from 'swr';
 
-function LastSale() {
+function LastSale({saleData}) {
 
-    const { data, error } = useSWR('https://next-section5-bcbe4-default-rtdb.firebaseio.com/sales.json');
-    const [sales, setSales] = useState();
+    const [sales, setSales] = useState(saleData);
+    const fetcher = url => fetch(url).then(r => r.json())
+    const { data, error } = useSWR('https://next-section5-bcbe4-default-rtdb.firebaseio.com/sales.json', fetcher);
     // const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log(data);
         if (data) {
             const transformedSale = [];
 
-            for (const key in rawData) {
+            for (const key in data) {
                 transformedSale.push(
                     {
                         id: key,
-                        username: rawData[key].username,
-                        volume: rawData[key].volume
+                        username: data[key].username,
+                        volume: data[key].volume
                     }
                 )
             }
@@ -51,7 +53,7 @@ function LastSale() {
     // if (loading) {
     //     return <p>loading</p>
     // }
-    if (!data || !sales) {
+    if (!data && !sales) {
         return <p>Loading..</p>
     }
     return (
@@ -64,3 +66,27 @@ function LastSale() {
 }
 
 export default LastSale
+
+export async function getStaticProps() {
+    const rawData = await fetch('https://next-section5-bcbe4-default-rtdb.firebaseio.com/sales.json');
+    const data = await rawData.json();
+    const transformedSale = [];
+
+    for (const key in data) {
+        transformedSale.push(
+            {
+                id: key,
+                username: data[key].username,
+                volume: data[key].volume
+            }
+        )
+    }
+
+    return {
+        props: {
+            saleData: transformedSale
+        },
+        revalidate: 10,
+    }
+
+}

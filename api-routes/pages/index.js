@@ -26,13 +26,24 @@ function HomePage() {
             .then((data) => console.log(data));
     }
 
-    function loadFeedbackHandler() {
-        fetch('/api/feedback')
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setFeedbackItems(data.feedback);
-            });
+    async function loadFeedbackHandler() {
+        // fetch('/api/feedback')
+        //     .then((response) => {
+        //         response.json()
+        //         console.log(response);
+        //     })
+        //     .then((data) => {
+        //         console.log(data);
+        //         setFeedbackItems(data.feedback);
+        //     });
+        try {
+            const res = await fetch('/api/feedback');
+            const data = await res.json();
+            setFeedbackItems(data.feedback)
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
 
     return (

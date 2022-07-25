@@ -2,22 +2,22 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 
+// TODO: Create buildFeedbackPath to get the file location/path
+export const buildFeedbackPath = (apiName) => {
+    const pathh = path.join(process.cwd(), 'data', `${apiName}`);
+    return pathh;
+}
+
+// TODO: Create a func which returns feedback data
+export const feedbackData = (path) => {
+    const file = fs.readFileSync(path);
+    const data = JSON.parse(file);
+    return data;
+}
+
 function handler(req, res) {
     // Todo get the email and feedback
     // text and store it into a database
-
-    // TODO: Create buildFeedbackPath to get the file location/path
-    const buildFeedbackPath = (apiName) => {
-        const pathh = path.join(process.cwd(), 'data', `${apiName}`);
-        return pathh;
-        }
-
-    // TODO: Create a func which returns feedback data
-    const feedbackData = (path) => {
-        const file = fs.readFileSync(path);
-        const data = JSON.parse(file);
-        return data;
-    }
 
     if (req.method === 'POST') {
         const email = req.body.email;

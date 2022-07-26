@@ -10,13 +10,7 @@ async function handler(req, res) {
         }
         console.log(email);
 
-        const client = await MongoClient.connect('mongodb+srv://harshptl14:h4rshptl14@cluster0.0wma2wa.mongodb.net/newsletter?retryWrites=true&w=majority');
-        // .then(
-        //     client => {
-        //         const db = client.db();
-        //         return db.collection('emails').insertOne({ email: email });
-        //     }
-        // )
+        const client = await MongoClient.connect(process.env.NEXT_PUBLIC_DATABASE_URL_NEWSLETTER);
         const db = client.db(); 
         await db.collection('emails').insertOne({ email: email });
         client.close();

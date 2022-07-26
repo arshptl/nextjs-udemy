@@ -6,8 +6,8 @@ function CommentList({ comments }) {
     <ul className={classes.comments}>
       {/* Render list of comments - fetched from API */}
       {comments.map((cmp) => {
-        return (<li>
-          <p id={cmp.id}>{cmp.text}</p>
+        return (<li  key={cmp._id}>
+          <p>{cmp.text}</p>
           <div>
             By <address>{cmp.name}</address>
           </div>

@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Notification from '../components/ui/notification';
 import { getFeaturedEvents } from '../helpers/api-util';
 import EventList from '../components/events/event-list';
 import NewsletterRegistration from '../components/input/newsletter-registration';
@@ -16,7 +15,6 @@ function HomePage(props) {
       </Head>
       <NewsletterRegistration />
       <EventList items={props.events} />
-      <Notification title="just testing" message="is it working?" status="error" />
     </div>
   );
 }

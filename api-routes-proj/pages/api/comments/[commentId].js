@@ -37,11 +37,6 @@ async function handler(req, res) {
                 text,
                 eventId
             }
-
-            // const db = client.db();
-
-            // const result = await db.collection('comments').insertOne(newCom)
-
             let result;
 
             try {
@@ -54,19 +49,11 @@ async function handler(req, res) {
         }
 
         console.log(result);
-        // newCom.id = result.insertedId;
-        // res.status(201).json({ message: 'success', res: newCom })
     }
 
 
     if (req.method === 'GET') {
         console.log('in get method');
-        // const db = client.db();
-
-        // const document = await db.collection('comments')
-        //     .find({ eventId: eventId })
-        //     .sort({ _id: -1 })
-        //     .toArray();
         try {
             const documents = await getAllDocuments(client, 'comments', { _id: -1 }, { eventId: eventId });
             res.status(200).json({ comments: documents });
@@ -74,9 +61,6 @@ async function handler(req, res) {
             res.status(500).json({ message: 'Getting comments failed.' });
         }
     }
-
-
-    // res.status(200).json({ comments: document })
 
     client.close();
 }

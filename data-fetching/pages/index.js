@@ -8,7 +8,7 @@ const index = ({ products }) => {
     return (
         <div>
             {products.map((obj) => (
-                <li>
+                <li key={obj.id}>
                     <Link href={`/product/${obj.id}`}>
                         {obj.title}
                     </Link>
@@ -18,6 +18,8 @@ const index = ({ products }) => {
     )
 }
 
+
+// getting data part, runs on the server
 export async function getStaticProps() {
     console.log("Building page.....");
     // builds an absolute path for that dummy-backend json file

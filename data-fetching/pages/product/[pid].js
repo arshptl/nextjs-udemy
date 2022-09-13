@@ -16,7 +16,6 @@ const SelectedProduct = ({ selectedProduct }) => {
     );
 };
 
-
 // to get the data from the local file system
 async function getData() {
     const filePath = path.join(process.cwd(), "data", "dummy-backend.json");
@@ -50,7 +49,7 @@ export async function getStaticProps(context) {
     };
 }
 
-// find the ids for the different paths, and kind enough to give to the getStaticProps, aww! 
+// find the ids for the different paths, and kind enough to give to the getStaticProps, aww!
 export async function getStaticPaths() {
     const data = await getData();
 
@@ -64,7 +63,8 @@ export async function getStaticPaths() {
     console.log(pathWithParams);
 
     return {
-        paths: [{ params: { pid: "p1" } }],
+        // paths: [{ params: { pid: "p1" } }],
+        paths: pathWithParams,
         fallback: false,
     };
 }

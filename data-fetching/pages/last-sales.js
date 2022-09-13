@@ -11,7 +11,7 @@ function LastSale({ saleData }) {
   // const [loading, setLoading] = useState(true);
 
   // combines the static site generation + client side data fetching
-  useEffect(() => {
+  useEffect(() => { 
     console.log(data);
     if (data) {
       const transformedSale = [];

@@ -8,7 +8,7 @@ const {data} = props
       <h1>
         {data.text} : {data.id}
       </h1>
-      <p>{data.email}</p>
+      <p><b>Author's email: </b>{data.email}</p>
     </div>
   );
 };

@@ -1,75 +1,55 @@
-import { useRef, useState } from 'react';
-
+import Link from "next/link";
+import { useRef, useState } from "react";
 
 function HomePage() {
-    const [feedbackItems, setFeedbackItems] = useState([]);
+  const emailInputRef = useRef();
+  const feedbackInputRef = useRef();
 
-    const emailInputRef = useRef();
-    const feedbackInputRef = useRef();
+  function submitFormHandler(event) {
+    event.preventDefault();
 
-    function submitFormHandler(event) {
-        event.preventDefault();
+    const enteredEmail = emailInputRef.current.value;
+    const enteredFeedback = feedbackInputRef.current.value;
 
-        const enteredEmail = emailInputRef.current.value;
-        const enteredFeedback = feedbackInputRef.current.value;
+    const reqBody = { email: enteredEmail, text: enteredFeedback };
+    console.log(reqBody);
 
-        const reqBody = { email: enteredEmail, text: enteredFeedback };
-        console.log(reqBody);
+    fetch("/api/feedback", {
+      method: "POST",
+      body: JSON.stringify(reqBody),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        emailInputRef.current.value = "";
+        feedbackInputRef.current.value = "";
+        console.log(data);
+      });
+  }
 
-        fetch('/api/feedback', {
-            method: 'POST',
-            body: JSON.stringify(reqBody),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => console.log(data));
-    }
-
-    async function loadFeedbackHandler() {
-        // fetch('/api/feedback')
-        //     .then((response) => {
-        //         response.json()
-        //         console.log(response);
-        //     })
-        //     .then((data) => {
-        //         console.log(data);
-        //         setFeedbackItems(data.feedback);
-        //     });
-        try {
-            const res = await fetch('/api/feedback');
-            const data = await res.json();
-            setFeedbackItems(data.feedback)
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
-
-    return (
+  return (
+    <div>
+      <form onSubmit={submitFormHandler}>
         <div>
-            <form onSubmit={submitFormHandler}>
-                <div>
-                    <label htmlFor='email'>Your Email Address</label>
-                    <input type='email' id='email' ref={emailInputRef} />
-                </div>
-                <div>
-                    <label htmlFor='feedback'>Your Feedback</label>
-                    <textarea id='feedback' rows='5' ref={feedbackInputRef}></textarea>
-                </div>
-                <button>Send Feedback</button>
-            </form>
-            <hr />
-            <button onClick={loadFeedbackHandler}>Load Feedback</button>
-            <ul>
-                {feedbackItems.map((item) => (
-                    <li key={item.id}>{item.text}</li>
-                ))}
-            </ul>
+          <label htmlFor="email">Your Email Address</label>
+          <input type="email" id="email" ref={emailInputRef} />
         </div>
-    );
+        <div>
+          <label htmlFor="feedback">Your Feedback</label>
+          <textarea id="feedback" rows="5" ref={feedbackInputRef}></textarea>
+        </div>
+        <button>Send Feedback</button>
+      </form>
+          <hr />
+          <Link href="/feedbackCS">Fetch feedback at Client side</Link>
+          <br/>
+          <Link href="/feedback">SSG feedback(Build time)</Link>
+          <br />
+          <Link href="/feedbackSSR">SSR feedback(On the server)</Link>
+    </div>
+  );
 }
 
 export default HomePage;
-

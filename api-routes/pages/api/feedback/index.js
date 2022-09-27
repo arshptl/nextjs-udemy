@@ -19,13 +19,15 @@ function handler(req, res) {
         data.push(newFeedbackObj);
         fs.writeFileSync(filePath, JSON.stringify(data));
         res.status(201).json({ message: 'Success!', feedback: newFeedbackObj })
-    } else {
-        const filePath = buildPath("feedback.json");
-        const data = dataFromPath(filePath);
+    } else if (req.method === "GET") {
+    
+      // Get api to get all feedbacks
+      const filePath = buildPath("feedback.json");
+      const data = dataFromPath(filePath);
 
-        res.status(200).json({
-            feedback: data
-        });
+      res.status(200).json({
+        feedback: data,
+      });
     }
 }
 

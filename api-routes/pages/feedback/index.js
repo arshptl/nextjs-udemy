@@ -1,33 +1,55 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { buildPath, dataFromPath } from "../../utils/fileReadWrite";
 
-// const Feedback = ({ feedbackItems }) => {
-//   const [feedbackData, setFeedback] = useState();
+const Feedback = ({ feedbackItems }) => {
+  const [feedbackData, setFeedback] = useState();
+  const [feedbacks, setNewFeedback] = useState(feedbackItems);
 
-//   const feedbackHandler = async (id) => {
-//     const data = await (await fetch(`/api/feedback/${id}`)).json();
-//     setFeedback(data.feedback);
-//   };
-//   return (
-//     <Fragment>
-//       {feedbackData && <p>{feedbackData.email}</p>}
+  const feedbackHandler = async (id) => {
+    const data = await (await fetch(`/api/feedback/${id}`)).json();
+    setFeedback(data.feedback);
+  };
 
-//       <ul>
-//         {feedbackItems.map((item) => (
-//           <li key={item.id}>
-//             <Link href={`/feedback/${item.id}`}>{item.text}</Link>
-//             <button onClick={() => feedbackHandler(item.id)}>
-//               show details
-//             </button>
-//           </li>
-//         ))}
-//       </ul>
-//     </Fragment>
-//   );
-// };
+      const handleDeleteFeedback = async (id) => {
+      const apiReq = await fetch(`/api/feedback/${id}`, {
+        method: "DELETE",
+      });
 
-// export default Feedback;
+      const responseback = await apiReq.json();
+        console.log(responseback);  
+        
+        const newesetFeedback = await (await fetch(`/api/feedback`)).json();
+        console.log("newFeedback", newesetFeedback.feedback);
+        setNewFeedback(newesetFeedback.feedback);
+      };
+  
+  useEffect(() => {
+    console.log(feedbacks);
+  }, [feedbacks])
+
+  return (
+    <Fragment>
+      {feedbackData && <p>{feedbackData.email}</p>}
+
+      <ul>
+        {feedbacks.map((item) => (
+          <li key={item.id}>
+            <Link href={`/feedback/${item.id}`}>{item.text}</Link>
+            <button onClick={() => feedbackHandler(item.id)}>
+              show details
+            </button>
+            <button onClick={() => handleDeleteFeedback(item.id)}>
+              Delete Feedback
+            </button>
+          </li>
+        ))}
+      </ul>
+    </Fragment>
+  );
+};
+
+export default Feedback;
 
 // Two ways to ------- get -------- data
 // 1. Get it locally from the file system (PRE RENDER)
@@ -42,50 +64,61 @@ import { buildPath, dataFromPath } from "../../utils/fileReadWrite";
 // 2. Client side fetching
 //    a. Just put the apis into the useEffect
 
-// export async function getStaticProps() {
-//   const filePath = buildPath("feedback.json");
-//   const data = dataFromPath(filePath);
-//   console.log(data);
-//   return {
-//     props: {
-//       feedbackItems: data,
-//     },
-//   };
-// }
-
-const Feedback = ({ feedbackData }) => {
-  const [singleFeedback, setSingleFeedback] = useState();
-  const feedbackHandler = async (id) => {
-    const data = await (await fetch(`/api/feedback/${id}`)).json();
-    setSingleFeedback(data.feedback);
-  };
-  return (
-    <Fragment>
-      {singleFeedback && <p>{singleFeedback.email}</p>}
-
-      <ul>
-        {feedbackData?.map((item) => (
-          <li key={item.id}>
-            <Link href={`/feedback/${item.id}`}>{item.text}</Link>
-            <button onClick={() => feedbackHandler(item.id)}>
-              show details
-            </button>
-          </li>
-        ))}
-      </ul>
-    </Fragment>
-  );
-};
-
-export default Feedback;
-
 export async function getStaticProps() {
-  const feedbackData = await (
-    await fetch(`http://localhost:3000/api/feedback`)
-  ).json();
+  const filePath = buildPath("feedback.json");
+  const data = dataFromPath(filePath);
+  console.log(data);
   return {
     props: {
-      feedbackData: feedbackData.feedback,
+      feedbackItems: data,
     },
   };
 }
+
+// const Feedback = ({ feedbackData }) => {
+//   const [singleFeedback, setSingleFeedback] = useState();
+//   const feedbackHandler = async (id) => {
+//     const data = await (await fetch(`/api/feedback/${id}`)).json();
+//     setSingleFeedback(data.feedback);
+//   };
+
+//     const handleDeleteFeedback = async (id) => {
+//       const apiReq = await fetch(`/api/feedback/${id}`, {
+//         method: "DELETE",
+//       });
+
+//       const responseback = await apiReq.json();
+//       console.log(responseback);  
+//     };
+  
+//   return (
+//     <Fragment>
+//       {singleFeedback && <p>{singleFeedback.email}</p>}
+
+//       <ul>
+//         {feedbackData?.map((item) => (
+//           <li key={item.id}>
+//             <Link href={`/feedback/${item.id}`}>{item.text}</Link>
+//             <button onClick={() => feedbackHandler(item.id)}>
+//               Show details
+//             </button>
+//             <button onClick={() => handleDeleteFeedback(item.id)}>Delete Feedback</button>
+//           </li>
+//         ))}
+//       </ul>
+//     </Fragment>
+//   );
+// };
+
+// export default Feedback;
+
+// export async function getStaticProps() {
+//   const feedbackData = await (
+//     await fetch(`http://localhost:3000/api/feedback`)
+//   ).json();
+//   return {
+//     props: {
+//       feedbackData: feedbackData.feedback,
+//     },
+//   };
+// }

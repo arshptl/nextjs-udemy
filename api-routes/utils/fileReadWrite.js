@@ -15,13 +15,18 @@ export const dataFromPath = (path) => {
   return data;
 };
 
-export const writeFile = (data, path) => {
+export const writeFile = (data, apiName) => {
   const filePath = path.join(process.cwd(), "data", `${apiName}`);
-  fs.writeFile(filePath, data, { flag: "a+" }, (err) => {
-    if (!err) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+  
+  // fs.writeFileSync(filePath, data, { flag: "a+" }, (err) => {
+  //   if (!err) {
+  //     return {message: "error deleting feedback"};
+  //   } else {
+  //       const file = fs.readFileSync(path);
+  //       const data = JSON.parse(file);
+  //       return data;
+  //   }
+  // });
+
+  fs.writeFileSync(filePath, data);
 };

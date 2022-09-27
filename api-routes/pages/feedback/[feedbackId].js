@@ -1,15 +1,14 @@
 import React from "react";
 import { buildPath, dataFromPath } from "../../utils/fileReadWrite";
 
-const FeedbackId = ({ data }) => {
-
+const FeedbackId = (props) => {
+const {data} = props
   return (
     <div>
       <h1>
         {data.text} : {data.id}
       </h1>
       <p>{data.email}</p>
-      <button onClick={handleDeleteFeedback}>Delete this feedback</button>
     </div>
   );
 };
